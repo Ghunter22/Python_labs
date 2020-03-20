@@ -1,8 +1,23 @@
 M = 64.063
 Pc = 77.8
-Tc = 430.8 # критическая
-T = int(input()) + 273.5 # текущая температура
+Tc = 430.8 # критическая                                 # 5-ая лабораторная
 
+print("Введите значение температуры")
+def is_digit(string): # проверка, что ввел пользователь
+    if string.isdigit():
+       return True
+    else:
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
+str_t = input()
+if is_digit(str_t):
+    T = float(str_t) + 273.5 # текущая температура
+else:
+    print("Введите числовое значение")
+    raise SystemExit
 
 
 def TZC(M, Pc, Tc):
@@ -25,9 +40,8 @@ def Nf(tzc, tr):
 tr = Tr(T,Tc) # безразмерная температура
 tzc = TZC(M,Pc,Tc) # вязкость  при крит температуре
 N = Nf(tzc,tr)# финальная фязкость
-print(N)
-print(""
-      "")
+print(N) # результат расчета на основе введеных данных пользователя
+print('\n')
 
 
 
@@ -47,8 +61,12 @@ def all_result(T):
     if (tr <= 1):
         N = Nf_2(tzc, tr)  # финальная фязкость
     print(N)
+    f.write(str(T) + '\n') # записываю в файл данные температуры
+    res.write(str(N)+ '\n')  # записываю в файл результаты
 
 #T = int(input()) + 273.5 # текущая температура
+f = open('temp.txt','w')
+res = open('res.txt','w')
 i = 0
 temp = []
 while(i < 101):
@@ -56,3 +74,19 @@ while(i < 101):
     i+=1
 
 ress = list(map(all_result,temp))
+f.close()
+
+
+print('НОВЫЙ РАСЧЕТ ' + '\n'+ '\n'+ '\n')
+#                                                      ЛАБОРАТОРНАЯ 6
+#берем данные из файла
+all_temp = []
+f = open('temp.txt')
+for line in f:
+    all_temp.append(float(line))
+f.close()
+f = open('temp.txt','w') # тут хранится исходная температура
+res = open('res.txt','w') # тут хранятся результаты
+# передаю данные считанные из файла
+ress2 = list(map(all_result,all_temp))
+print("DONE")
